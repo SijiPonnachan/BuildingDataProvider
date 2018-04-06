@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.amazonaws.util.json.JSONArray;
 import com.siji.practice.buildinganalysis.dto.AnalyticsData;
@@ -30,6 +29,7 @@ public class MainController {
 	@RequestMapping("/app")
 	public String showSampleMessage(Model model) {
 
+		String loadStatus = "Failure";
 		//clear list
 		buildingInfoList.clear();
 		analyticsDataList.clear();
@@ -73,16 +73,46 @@ public class MainController {
 
 			}
 
+			loadStatus = "Success";
+			
 			System.out.println(buildingInfoList.toString());
 			System.out.println(analyticsDataList.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			loadStatus = "Failure";
 		}
-
-		model.addAttribute("message", "JSON loaded");
+		
+		
+		model.addAttribute("message", loadStatus);
 		return "welcome";
 		//return "Both JSON loaded to Lists";
 	}
 	
+	
+	@RequestMapping("/showResults")
+	public String showResults(Model model) {
+		
+		//Samsung total cost
+		Double totalCostSamsung = dataProcessingService.totalPurchaseCost("Samsung", analyticsDataList);
+		model.addAttribute("totalCostSamsung", totalCostSamsung);
+		
+		//countofItemPurchased if id 47
+		int itemPurchaseCount = dataProcessingService.countOfItemPurchase(47, analyticsDataList);
+		model.addAttribute("itemPurchaseCount", itemPurchaseCount);
+		
+		//ItemCatPurchaseCost
+		Double totalCostofItemCat = dataProcessingService.totalPurchaseCostOfItemCategory(7, analyticsDataList);
+		model.addAttribute("totalCostofItemCat", totalCostofItemCat);
+		
+		//totalPurchaseCostForprovince
+		Double totalCostForProvince = dataProcessingService.totalPurchaseCostForProvince("Ontario", analyticsDataList, buildingInfoList);
+		model.addAttribute("totalCostForProvince", totalCostForProvince);
+		
+		//totalPurchaseCostForCountry
+		Double totalPurchaseCostForCountry = dataProcessingService.totalPurchaseCostForCountry("United States", analyticsDataList, buildingInfoList);
+		model.addAttribute("totalPurchaseCostForCountry", totalPurchaseCostForCountry);
+		
+		return "result";
+	}
 }
