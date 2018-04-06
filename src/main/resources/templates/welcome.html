@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+<head>
+    <title>BuildingDataProcessor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h2> Welcome to BuildingDataProcesser program </h2>
+    <p th:text="'JSON load status --> '+ ${message} + '!'" />
+    
+    <form action="#" th:action="@{/showResults}" th:object="${buildingData}">
+    	<p style="color:green;"> If the above JSON load status is SUCCESS, please click Submit  to get the below processed data from the loaded JSONs, </p>
+    	
+    	<p><input type="submit" value="Submit" /> </p>
+    </form>
+    
+</body>
+</html>
